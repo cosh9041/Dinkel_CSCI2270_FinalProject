@@ -12,15 +12,14 @@ Project Summary:
 	be done by storing the movies in a binary search tree.
 
 How to Run
-	Download all files and store in the same directory.
-	Use the linux command: g++ FinalProject.cpp s
+
 
 Dependencies
-	None
+
 
 System Requirements
 	This program is written specifically to be run on Linux, but should
-	work on any operating system with a command line compiler.
+	work on an
 
 Group Members
 	Jack Dinkel
