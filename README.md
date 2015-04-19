@@ -6,7 +6,7 @@ Project Summary:
 	This project is an expansion on Assignment9 that dealt with using
 	a hashtable to store movie information. This expansion will be a
 	tool to help users keep track of their favorite movies. As such,
-	it will prompt users to input a ranking, 1-100 for each movie they
+	it will prompt users to input a ranking, 1-10 for each movie they
 	store. The program will then give the options of printing the movies
 	in order of rank, or in alphabetical order. This implementation will
 	be done by storing the movies in a binary search tree.
