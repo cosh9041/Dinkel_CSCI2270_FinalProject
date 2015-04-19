@@ -94,7 +94,10 @@ void HashTable::printInventory(){ //prints the contents of the hashtable
 
 		while (traverse->next != NULL){
 			if (traverse->next->title.size() > 0){ //if the title exists
-				cout << traverse->next->title << ":" << traverse->next->year << endl; //print
+				cout << "Movie found in position: " << i << endl;
+                cout << "\tTitle: " << movieToFind->title << endl;
+                cout << "\tYear: " << movieToFind->year << endl;
+                cout << "\tRanking: " << movieToFind->ranking << endl;
 				count++;
 			}
 			traverse = traverse->next;

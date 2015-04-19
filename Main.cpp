@@ -1,6 +1,6 @@
 //Jack Dinkel
 //CSCI 2270 - Hoenigman
-//Assignment9
+//Final Project
 
 //Driver file
 
@@ -36,16 +36,20 @@ int main(){
             	Movie *newMovie = new Movie;
             	string title;
             	int year;
+                int ranking;
 
             	//ask user for input
-            	cout << "Enter title:" << endl;
+            	cout << "Enter title: " << endl;
             	title = askInput();
-            	cout << "Enter year:" << endl;
+            	cout << "Enter year: " << endl;
             	cin >> year;
+                cout << "Enter your ranking (1-100): " << endl;
+                cin >> ranking;
 
             	//build the new Movie object
             	newMovie->title = title;
             	newMovie->year = year;
+                newMovie->ranking = ranking;
 
             	h.insertMovie(newMovie); //insert the movie into the hashtable
 
@@ -58,7 +62,7 @@ int main(){
             	string title;
 
             	//ask user for input
-            	cout << "Enter title:" << endl;
+            	cout << "Enter title: " << endl;
             	title = askInput();
 
             	h.deleteMovie(title); //delete the movie from the hashtable
@@ -72,7 +76,7 @@ int main(){
             	string title;
 
             	//ask user for input
-            	cout << "Enter title:" << endl;
+            	cout << "Enter title: " << endl;
             	title = askInput();
 
             	movieToFind = h.findMovie(title); //search the hashtable for the movie
@@ -81,7 +85,10 @@ int main(){
             		cout << "not found" << endl;
             	}
             	else{ //print statement
-            		cout << h.hashFunction(title) << ":" << movieToFind->title << ":" << movieToFind->year << endl;
+            		cout << "Movie found in position: " << h.hashFunction(title) << endl;
+                    cout << "\tTitle: " << movieToFind->title << endl;
+                    cout << "\tYear: " << movieToFind->year << endl;
+                    cout << "\tRanking: " << movieToFind->ranking << endl;
             	}
 
                 break;
