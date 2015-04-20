@@ -20,9 +20,9 @@ int regexTest();
 void similarity();
 
 int main(){
-    similarity();
-    return 0;
 	HashTable h(10); //initialize the table
+    cout << h.ham("this is a test", "thisis a test") << endl;
+    cout << h.ham("another test", "another") << endl;
 
 	bool quit = false;
 	int input;
@@ -183,7 +183,9 @@ void similarity(){
 
     float maxLen;
     float ham = 0;
-    float score;
+    float score1;
+    float score2;
+
 
     for (int i = s1.length()-1; i >= 0; i--){
         s1inv += s1[i];
@@ -193,30 +195,28 @@ void similarity(){
     }
 
 
-
-    if (s1.length() > s2.length()){
-        maxLen = s2.length();
-    }
-    else{
-        maxLen = s1.length();
-    }
-
     for (int i = 0; i < s1.length(); i++){
         if (s1[i] != s2[i]){
             ham++;
         }
     }
-    /*for (int i = 0; i < maxLen; i++){
+
+    score1 = (s1.length() - ham) / s1.length();
+
+    cout << score1 << endl;
+
+
+    ham = 0;
+
+
+    for (int i = 0; i < s1inv.length(); i++){
         if (s1inv[i] != s2inv[i]){
             ham++;
         }
     }
-    ham /= 2;
-    cout << ham << endl;*/
 
-    score = (s1.length() - ham) / s1.length();
+    score2 = (s1inv.length() - ham) / s1inv.length();
 
-    cout << score << endl;
-
+    cout << score2 << endl;
 
 }

@@ -119,3 +119,52 @@ int HashTable::hashFunction(string in_title){ //hash function, adds up ASCII val
 
 	return hash;
 }
+
+bool HashTable::ham(string in_title, string compare_title){
+	string in_title_inverse = "";
+	string compare_title_inverse = "";
+	float ham = 0;
+	float score1;
+	float score2;
+
+	for (int i = in_title.length()-1; i >= 0; i--){
+        in_title_inverse += in_title[i];
+    }
+    for (int i = compare_title.length()-1; i >= 0; i--){
+        compare_title_inverse += compare_title[i];
+    }
+
+
+    for (int i = 0; i < in_title.length(); i++){
+        if (in_title[i] != compare_title[i]){
+            ham++;
+        }
+    }
+
+    score1 = (in_title.length() - ham) / in_title.length();
+
+    cout << score1 << endl;
+
+
+    ham = 0;
+
+
+    for (int i = 0; i < in_title_inverse.length(); i++){
+        if (in_title_inverse[i] != compare_title_inverse[i]){
+            ham++;
+        }
+    }
+
+    score2 = (in_title_inverse.length() - ham) / in_title_inverse.length();
+
+    cout << score2 << endl;
+    if (score1 < score2){
+    	score1 = score2;
+    }
+    if (score2 >= .5){
+    	return true;
+    }
+    else{
+    	return false;
+    }
+}

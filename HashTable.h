@@ -32,6 +32,7 @@ class HashTable
         void deleteMovie(std::string in_title);
         void printInventory();
         int hashFunction(std::string in_title);
+        bool ham(std::string in_title, std::string compare_title);
     protected:
     private:
         int table_size;
