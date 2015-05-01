@@ -9,23 +9,26 @@
 //Takes no command line input
 
 #include <iostream>
-#include <regex>
-#include "HashTable.h"
+#include "HashTable.h" //include the HashTable class
 
 using namespace std;
 
 void displayMenu();
 string askInput();
-int regexTest();
-void similarity();
 
 int main(){
-	HashTable h(10); //initialize the table
-    cout << h.ham("this is a test", "thisis a test") << endl;
-    cout << h.ham("another test", "another") << endl;
+    /*
+    main function:
+    This function handles a main menu with user input to select options.
+    It then calls other functions based on the user input.
+    When the function ends, the program terminates
+    */
 
-	bool quit = false;
-	int input;
+	HashTable h(10); //initialize the table
+
+	bool quit = false; //when true, will end the while loop below
+	int input; //user input variable
+    int movieCounter = 0; //counter to track number of movies in hashTable
 
 	while(quit != true){ //to run until the user says quit
         displayMenu();
@@ -35,30 +38,48 @@ int main(){
         cin.clear();
         cin.ignore(10000,'\n');
 
-        switch (input){
+        switch (input){ //this switch handles the main input from the menu
             case 1: //insert movie
             {
-            	Movie *newMovie = new Movie;
+            	Movie *newMovie = new Movie; //movie to create
+                //input variables
             	string title;
+            	string tempYr;
+            	string tempRank;
             	int year;
-                int ranking;
+                double ranking;
 
             	//ask user for input
             	cout << "Enter title: ";
             	title = askInput();
             	cout << "Enter year: ";
-            	cin >> year;
-                cout << "Enter your ranking (1-10): ";
-                cin >> ranking;
-                while (ranking > 100 || ranking < 1){ //if ranking invalid
+            	cin >> tempYr;
+            	year = stoi(tempYr);
+            	
+                cout << "Enter your ranking (0-10): ";
+                cin >> tempRank;
+                ranking = stod(tempRank);
+                while (ranking > 10.0 || ranking < 0.0){ //if ranking invalid
                     cout << "Invalid ranking! Please enter an integer between 1 and 10: ";
-                    cin >> ranking;
+                    cin >> tempRank; //try again
+					ranking = stod(tempRank);
                 }
 
             	//build the new Movie object
             	newMovie->title = title;
             	newMovie->year = year;
                 newMovie->ranking = ranking;
+                newMovie->next = NULL;
+                newMovie->alphaLeft = NULL;
+                newMovie->alphaRight = NULL;
+                newMovie->numLeft = NULL;
+                newMovie->numRight = NULL;
+
+                //if it is the first movie added, set as root
+                if (movieCounter == 0){
+                    h.root = newMovie;
+                    movieCounter++; //increase movieCounter so the if is not entered again
+                }
 
             	h.insertMovie(newMovie); //insert the movie into the hashtable
 
@@ -67,8 +88,7 @@ int main(){
 
             case 2: //delete movie
             {
-            	Movie *movieToFind = new Movie;
-            	string title;
+            	string title; //input variable
 
             	//ask user for input
             	cout << "Enter title: " << endl;
@@ -82,7 +102,7 @@ int main(){
             case 3: //find movie
             {
             	Movie *movieToFind = new Movie;
-            	string title;
+            	string title; //input variable
 
             	//ask user for input
             	cout << "Enter title: " << endl;
@@ -90,10 +110,10 @@ int main(){
 
             	movieToFind = h.findMovie(title); //search the hashtable for the movie
 
-            	if (movieToFind == NULL){ //if NULL is returned, print "not found"
-            		cout << "not found" << endl;
+            	if (movieToFind == NULL){ //if NULL is returned, try to match movie
+                    h.movieMatch(title);
             	}
-            	else{ //print statement
+            	else{ //print statements
             		cout << "Movie found in position: " << h.hashFunction(title) << endl;
                     cout << "\tTitle: " << movieToFind->title << endl;
                     cout << "\tYear: " << movieToFind->year << endl;
@@ -108,11 +128,23 @@ int main(){
                 break;
 
             case 5: //Print in alphebetical order
-                cout << "print in alphebetical order" << endl;
+            {
+                h.buildBSTString(h.root); //build a BST to order movies in alphabetical order
+                h.PrintThatTreeString(h.root); //print the BST
+
+                //clear BST
+                h.root->alphaLeft = NULL;
+                h.root->alphaRight = NULL;
                 break;
+            }
 
             case 6: //Print in rank order
-                cout << "print in rank order" << endl;
+                h.buildBSTNum(h.root); //build a BST to order movies in rank order
+                h.PrintThatTreeNum(h.root); //print the BST
+
+                //clear BST
+                h.root->numLeft = NULL;
+                h.root->numRight = NULL;
                 break;
 
             case 7: //Quit
@@ -130,7 +162,24 @@ int main(){
     return 0;
 }
 
-void displayMenu(){ //displays the Main Menu for the program
+void displayMenu(){
+    /*
+    Function prototype:
+    void displayMenu();
+
+    Function Description:
+    This method diplays the main menu for the program and then ends
+
+    Example:
+    displayMenu();
+
+    Pre-condition:
+    None
+
+    Post-condition:
+    The menu has been printed
+    */
+
     cout << "======Main Menu======" << endl;
     cout << "1. Insert movie" << endl;
     cout << "2. Delete movie" << endl;
@@ -142,7 +191,26 @@ void displayMenu(){ //displays the Main Menu for the program
     return;
 }
 
-string askInput(){ //waits for user for input, returns a string (works with spaces)
+string askInput(){
+    /*
+    Function prototype:
+    string askInput();
+
+    Function Description:
+    This method asks the user for input
+    Spaces are not excluded, so the input string can contain a space
+
+    Example:
+    String input;
+    input = askInput();
+
+    Pre-condition:
+    A string variable to store the return value of the function needs to be initialized
+
+    Post-condition:
+    the inputed string will be returned
+    */
+
 	char input[100];
 	string inputString;
 	cin >> inputString;
@@ -150,73 +218,4 @@ string askInput(){ //waits for user for input, returns a string (works with spac
 	inputString += string(input);
 
 	return inputString;
-}
-
-int regexTest(){
-    std::string subject("Name: John Doe");
-    std::string result;
-    cout << "test" << endl;
-    try {
-        std::regex re("Name: (.*)");
-        std::smatch match;
-        if (std::regex_search(subject, match, re) && match.size() > 1) {
-            result = match.str(1);
-        }
-        else {
-            result = std::string("");
-        } 
-        cout << result << endl;
-    }
-    catch (std::regex_error& e) {
-        cout << "error" << endl;
-          // Syntax error in the regular expression
-    }
-
-  return 0;
-}
-
-void similarity(){
-    string s1 = "This is a test";
-    string s2 = "This is a test";
-    string s1inv = "";
-    string s2inv = "";
-
-    float maxLen;
-    float ham = 0;
-    float score1;
-    float score2;
-
-
-    for (int i = s1.length()-1; i >= 0; i--){
-        s1inv += s1[i];
-    }
-    for (int i = s2.length()-1; i >= 0; i--){
-        s2inv += s2[i];
-    }
-
-
-    for (int i = 0; i < s1.length(); i++){
-        if (s1[i] != s2[i]){
-            ham++;
-        }
-    }
-
-    score1 = (s1.length() - ham) / s1.length();
-
-    cout << score1 << endl;
-
-
-    ham = 0;
-
-
-    for (int i = 0; i < s1inv.length(); i++){
-        if (s1inv[i] != s2inv[i]){
-            ham++;
-        }
-    }
-
-    score2 = (s1inv.length() - ham) / s1inv.length();
-
-    cout << score2 << endl;
-
 }
